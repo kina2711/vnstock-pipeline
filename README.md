@@ -39,7 +39,7 @@ Hệ thống được thiết kế theo mô hình Medallion Architecture (Bronze
 *Hệ thống CI/CD sẽ tự động chạy và ghi đè kết quả mới nhất vào phần dưới đây mỗi ngày:*
 
 <!-- LATEST_SIGNALS_START -->
-**Cập nhật lần cuối:** `2026-06-19 09:25:45`
+**Cập nhật lần cuối:** `2026-06-19 09:31:29`
 
 - **FPT** (`71500.0`): Tín hiệu `Tích lũy nền chặt (Giả lập Test Bot)` (RSI: 42.4, MACD: -302.08)
 - **SSI** (`27150.0`): Tín hiệu `Tích lũy nền chặt (Giả lập Test Bot)` (RSI: 48.1, MACD: -139.24)
