@@ -1,0 +1,17 @@
+# Môi trường ảo Python
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Khóa bảo mật và Biến môi trường (TUYỆT ĐỐI KHÔNG PUSH LÊN GITHUB)
+.env
+gcp_credentials.json
+
+# CSDL Local (nếu có dùng lại)
+*.db
+*.sqlite3
+
+# Hệ điều hành
+.DS_Store
+Thumbs.db

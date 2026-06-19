@@ -1,0 +1,74 @@
+name: VN Stock Data Pipeline & CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    # Chạy mỗi ngày vào lúc 08:30 UTC (Tương đương 15:30 chiều giờ VN - Sau giờ đóng cửa)
+    - cron: '30 8 * * 1-5' # Từ Thứ 2 đến Thứ 6
+  workflow_dispatch: # Cho phép trigger bằng tay trên Github
+
+jobs:
+  run-eod-analysis:
+    name: Run Daily EOD Crawler & Technical Engine
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+          
+      - name: Install Dependencies
+        run: |
+          cd vnstock_pipeline
+          pip install -r requirements.txt
+          
+      - name: Run Crawler & Technical Alert Bot
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          cd vnstock_pipeline
+          python crawler.py
+          python technical_engine.py
+
+      - name: Commit and Push README Update
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add vnstock_pipeline/README.md
+          git commit -m "Auto-update latest technical signals in README" || exit 0
+          git push
+
+  build-and-push-docker:
+    name: Build & Publish Docker Image (For Realtime VPS deployment)
+    needs: run-eod-analysis
+    if: github.event_name == 'push' # Chỉ build Docker khi có code mới push lên
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the Container registry (GHCR)
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./vnstock_pipeline
+          push: true
+          tags: ghcr.io/${{ github.repository }}/vnstock-bot:latest
