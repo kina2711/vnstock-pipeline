@@ -27,7 +27,6 @@ jobs:
           
       - name: Install Dependencies
         run: |
-          cd vnstock_pipeline
           pip install -r requirements.txt
           
       - name: Run Crawler & Technical Alert Bot
@@ -38,7 +37,6 @@ jobs:
           BQ_DATASET: ${{ secrets.BQ_DATASET }}
           GOOGLE_APPLICATION_CREDENTIALS: gcp_credentials.json
         run: |
-          cd vnstock_pipeline
           # Tạo file credential từ Github Secrets
           cat << 'EOF' > gcp_credentials.json
           ${{ secrets.GCP_CREDENTIALS_JSON }}
@@ -50,7 +48,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add vnstock_pipeline/README.md
+          git add README.md
           git commit -m "Auto-update latest technical signals in README" || exit 0
           git push
 
@@ -77,6 +75,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./vnstock_pipeline
+          context: .
           push: true
           tags: ghcr.io/${{ github.repository }}/vnstock-bot:latest
