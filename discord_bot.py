@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands, tasks
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from discord import app_commands
 import os
 import yfinance as yf
@@ -283,9 +285,27 @@ async def daily_report_task():
                 if channel:
                     await channel.send(f"<@{uid}>\n{news_msg}")
 
+class DummyHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(b"Discord Bot is alive!")
+
+def run_dummy_server():
+    port = int(os.environ.get("PORT", 8080))
+    server = HTTPServer(('0.0.0.0', port), DummyHandler)
+    server.serve_forever()
+
+def keep_alive():
+    t = threading.Thread(target=run_dummy_server)
+    t.daemon = True
+    t.start()
+
 if __name__ == "__main__":
     if TOKEN:
         print("[*] Đang khởi động Bot...")
+        keep_alive()  # Khởi chạy server ảo để vượt qua bài kiểm tra Port của Render
         bot.run(TOKEN)
     else:
         print("[!] Không tìm thấy DISCORD_BOT_TOKEN trong file .env")
