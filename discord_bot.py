@@ -207,6 +207,38 @@ async def sage_analyze(interaction: discord.Interaction, ticker: str):
     except Exception as e:
         await interaction.followup.send(f"❌ Trading Sage gặp sự cố: {e}", ephemeral=True)
 
+# Lệnh Thống kê Lịch sử Khuyến nghị
+@bot.tree.command(name="sage_stats", description="📊 Xem Thống kê Lịch sử Khuyến nghị tự động (Win-rate, Các lệnh đang mở)")
+async def sage_stats(interaction: discord.Interaction):
+    await interaction.response.defer()
+    try:
+        stats = database.get_trade_statistics()
+        open_trades = database.get_open_trades()
+        
+        embed = discord.Embed(
+            title="📊 BÁO CÁO HIỆU QUẢ GIAO DỊCH (TRADE STATISTICS)", 
+            color=0x00FF00 if stats["win_rate"] >= 50 else 0xFF0000
+        )
+        embed.add_field(name="Tổng số lệnh phím", value=f"**{stats['total']}**", inline=True)
+        embed.add_field(name="Lệnh Đang Mở (OPEN)", value=f"**{stats['open']}**", inline=True)
+        embed.add_field(name="Tỷ lệ Thắng (Win-rate)", value=f"**{stats['win_rate']}%**", inline=True)
+        embed.add_field(name="Chốt lời thành công", value=f"🟢 {stats['win']}", inline=True)
+        embed.add_field(name="Cắt lỗ", value=f"🔴 {stats['loss']}", inline=True)
+        
+        # Hiển thị tối đa 5 lệnh đang mở mới nhất
+        if open_trades:
+            open_txt = ""
+            for t in open_trades[:5]:
+                open_txt += f"• **{t['ticker']}** (Mua: {t['price']:,.0f}) 🎯 Target: {t['target']:,.0f} | 🛡️ Cutloss: {t['cutloss']:,.0f}\n"
+            embed.add_field(name="📋 Top 5 lệnh Đang mở (OPEN) mới nhất", value=open_txt, inline=False)
+        else:
+            embed.add_field(name="📋 Lệnh Đang mở (OPEN)", value="Hiện tại không có lệnh Mua nào đang mở.", inline=False)
+            
+        embed.set_footer(text="Hệ thống tự động ghi nhận khi Technical Engine báo 'MUA MỚI'")
+        await interaction.followup.send(embed=embed)
+    except Exception as e:
+        await interaction.followup.send(f"❌ Có lỗi xảy ra: {e}")
+
 # Task chạy tự động (VD: cứ mỗi 30 phút check 1 lần để scan PnL và News, demo để 5 phút)
 @tasks.loop(minutes=30)
 async def daily_report_task():

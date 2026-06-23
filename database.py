@@ -27,6 +27,20 @@ def init_db():
             created_at TEXT
         )
     ''')
+    # Bảng Lịch sử Khuyến nghị (Dùng cho Auto-trade và Thống kê sau này)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS trade_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ticker TEXT,
+            action TEXT,
+            price REAL,
+            target REAL,
+            cutloss REAL,
+            reason TEXT,
+            status TEXT,
+            created_at TEXT
+        )
+    ''')
     conn.commit()
     conn.close()
 
@@ -100,6 +114,54 @@ def get_all_portfolios():
     rows = cursor.fetchall()
     conn.close()
     return rows
+
+def log_recommendation(ticker: str, action: str, price: float, target: float, cutloss: float, reason: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO trade_history (ticker, action, price, target, cutloss, reason, status, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, 'OPEN', ?)
+    ''', (ticker.upper(), action, price, target, cutloss, reason, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    conn.commit()
+    conn.close()
+
+def get_trade_statistics():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT count(*) FROM trade_history')
+    total_trades = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT count(*) FROM trade_history WHERE status='WIN'")
+    win_trades = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT count(*) FROM trade_history WHERE status='LOSS'")
+    loss_trades = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT count(*) FROM trade_history WHERE status='OPEN'")
+    open_trades = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    win_rate = 0
+    closed_trades = win_trades + loss_trades
+    if closed_trades > 0:
+        win_rate = (win_trades / closed_trades) * 100
+        
+    return {
+        "total": total_trades,
+        "win": win_trades,
+        "loss": loss_trades,
+        "open": open_trades,
+        "win_rate": round(win_rate, 2)
+    }
+
+def get_open_trades():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT ticker, action, price, target, cutloss, reason, created_at FROM trade_history WHERE status="OPEN" ORDER BY id DESC LIMIT 10')
+    rows = cursor.fetchall()
+    conn.close()
+    return [{"ticker": r[0], "action": r[1], "price": r[2], "target": r[3], "cutloss": r[4], "reason": r[5], "created_at": r[6]} for r in rows]
 
 # Khởi tạo DB khi load module
 init_db()

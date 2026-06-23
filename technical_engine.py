@@ -6,6 +6,7 @@ from ta.volatility import BollingerBands
 from discord_alert import send_alert
 from dotenv import load_dotenv
 import pandas_gbq
+import database
 
 load_dotenv()
 
@@ -126,6 +127,17 @@ def run_eod_scanner():
                 
                 # Lưu vào list để ghi ra README
                 readme_results.append(f"- **{ticker}** (`{current_price}`): {action_str} - Tín hiệu `{signal_str}` (Target: {target_price:,.0f}, Cutloss: {cutloss_price:,.0f})")
+                
+                # Lưu lịch sử khuyến nghị vào Database để thống kê (Chỉ lưu lệnh MUA)
+                if action_str == "MUA MỚI":
+                    database.log_recommendation(
+                        ticker=ticker,
+                        action="MUA",
+                        price=current_price,
+                        target=target_price,
+                        cutloss=cutloss_price,
+                        reason=signal_str
+                    )
                 
         except Exception as e:
             print(f"Lỗi khi xử lý kỹ thuật mã {ticker}: {e}")
