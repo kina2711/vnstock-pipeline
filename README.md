@@ -39,7 +39,10 @@ Hệ thống được thiết kế theo mô hình Medallion Architecture (Bronze
 *Hệ thống CI/CD sẽ tự động chạy và ghi đè kết quả mới nhất vào phần dưới đây mỗi ngày:*
 
 <!-- LATEST_SIGNALS_START -->
-*Chưa có dữ liệu. Bot sẽ cập nhật trong lần chạy tiếp theo...*
+**Cập nhật lần cuối:** `2026-06-23 07:14:38`
+
+- **TCB** (`32450.0`): MUA MỚI - Tín hiệu `MACD Golden Cross` (Target: 35,695, Cutloss: 30,828)
+- **VPB** (`26850.0`): MUA MỚI - Tín hiệu `MACD Golden Cross` (Target: 29,535, Cutloss: 25,508)
 <!-- LATEST_SIGNALS_END -->
 
 ---
