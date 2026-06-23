@@ -7,4 +7,9 @@ psycopg2-binary==2.9.12
 schedule==1.2.2
 google-cloud-storage==2.14.0
 pandas-gbq==0.20.0
-pyarrow==15.0.0
+pyarrow
+discord.py
+google-cloud-firestore
+feedparser
+google-generativeai
+vnstock

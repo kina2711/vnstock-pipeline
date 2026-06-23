@@ -11,7 +11,11 @@ load_dotenv()
 
 GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID")
 BQ_DATASET = os.getenv("BQ_DATASET")
-WATCHLIST = ["FPT", "SSI", "MBB"]
+WATCHLIST = [
+    "FPT", "SSI", "HPG", "VCB", "CTG", "MBB", "TCB", "VPB", 
+    "MWG", "VHM", "VIC", "VNM", "PNJ", "MSN", "SAB", "STB", 
+    "HDB", "VIB", "ACB", "BCM"
+]
 
 def update_readme(results_str):
     """Cập nhật nội dung báo cáo tự động vào README.md"""
@@ -98,19 +102,30 @@ def run_eod_scanner():
             if latest['close'] <= latest['bb_low']:
                 signals.append("Giá chạm đáy Bollinger Bands")
                 
-            # -- Mock một tín hiệu để Test nếu không có thật --
-            # (Vì dữ liệu 20 phiên có thể không dính điều kiện nào)
-            if not signals:
-                signals.append("Tích lũy nền chặt (Giả lập Test Bot)")
-                
             # Tổng hợp và bắn Alert
             if signals:
                 signal_str = " + ".join(signals)
                 msg = f"Hệ thống TA tự động phát hiện cụm tín hiệu: **{signal_str}**.\nChỉ báo hiện tại: RSI = {latest['rsi']:.1f}, MACD = {latest['macd']:.2f}"
-                send_alert(ticker, "TÍN HIỆU TECHNICAL", latest['close'], latest['volume'], msg)
+                
+                # Tính toán Target và Cutloss mặc định (Target +10%, Cutloss -5%)
+                current_price = latest['close']
+                target_price = current_price * 1.10
+                cutloss_price = current_price * 0.95
+                action_str = "MUA MỚI" if "MACD" in signal_str or "RSI" in signal_str else "QUAN SÁT"
+                
+                send_alert(
+                    ticker=ticker, 
+                    signal_type="TÍN HIỆU TECHNICAL", 
+                    price=current_price, 
+                    volume=int(latest['volume']), 
+                    message=msg,
+                    target=target_price,
+                    cutloss=cutloss_price,
+                    action=action_str
+                )
                 
                 # Lưu vào list để ghi ra README
-                readme_results.append(f"- **{ticker}** (`{latest['close']}`): Tín hiệu `{signal_str}` (RSI: {latest['rsi']:.1f}, MACD: {latest['macd']:.2f})")
+                readme_results.append(f"- **{ticker}** (`{current_price}`): {action_str} - Tín hiệu `{signal_str}` (Target: {target_price:,.0f}, Cutloss: {cutloss_price:,.0f})")
                 
         except Exception as e:
             print(f"Lỗi khi xử lý kỹ thuật mã {ticker}: {e}")

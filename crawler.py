@@ -117,15 +117,19 @@ def fetch_realtime_data(tickers):
             table_id = f"{BQ_DATASET}.intraday_{ticker}"
             pandas_gbq.to_gbq(df, destination_table=table_id, project_id=GCP_PROJECT_ID, if_exists='replace')
             
-            # Giả lập xử lý real-time (Tính RSI/MACD nến phút ở đây)
-            print(f"[{ticker}] (Stream) Nạp thành công {len(df)} nến 1 phút mới nhất. Sẵn sàng cho Realtime Engine.")
+            # Đã nạp thành công dữ liệu Intraday vào DB
+            print(f"[{ticker}] (Stream) Nạp thành công {len(df)} nến 1 phút mới nhất.")
             
         except Exception as e:
             print(f"[{ticker}] Lỗi khi kéo dữ liệu Intraday: {e}")
 
 if __name__ == "__main__":
-    # Danh sách cổ phiếu quan tâm (Watchlist)
-    WATCHLIST = ["FPT", "SSI", "MBB"]
+    # Danh sách cổ phiếu quan tâm (Watchlist Top 20)
+    WATCHLIST = [
+        "FPT", "SSI", "HPG", "VCB", "CTG", "MBB", "TCB", "VPB", 
+        "MWG", "VHM", "VIC", "VNM", "PNJ", "MSN", "SAB", "STB", 
+        "HDB", "VIB", "ACB", "BCM"
+    ]
     
     print("🚀 Khởi chạy hệ thống thu thập dữ liệu & cảnh báo chứng khoán VN")
     

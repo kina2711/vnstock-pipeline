@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "main" ]
   schedule:
-    # Chạy mỗi ngày vào lúc 08:30 UTC (Tương đương 15:30 chiều giờ VN - Sau giờ đóng cửa)
-    - cron: '30 8 * * 1-5' # Từ Thứ 2 đến Thứ 6
+    # Chạy tự động mỗi 1 tiếng đồng hồ (Cập nhật dữ liệu Real-time)
+    - cron: '0 * * * *'
   workflow_dispatch: # Cho phép trigger bằng tay trên Github
 
 jobs:
