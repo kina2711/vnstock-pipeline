@@ -1,4 +1,5 @@
 import os
+import time
 import pandas as pd
 from datetime import datetime, timedelta
 import yfinance as yf
@@ -95,6 +96,7 @@ def fetch_realtime_data(tickers):
     for ticker in tickers:
         try:
             print(f"[{ticker}] Đang kéo dữ liệu Intraday (1 phút)...")
+            time.sleep(2)  # Nghỉ 2 giây để tránh block IP từ Yahoo Finance
             stock = yf.Ticker(f"{ticker}.VN")
             
             # yfinance cho phép lấy data 1m trong 7 ngày gần nhất
