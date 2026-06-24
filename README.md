@@ -29,7 +29,7 @@ Hệ thống tự động thu thập dữ liệu chứng khoán Việt Nam, phâ
 *Hệ thống CI/CD sẽ tự động chạy và ghi đè kết quả mới nhất vào phần dưới đây mỗi ngày:*
 
 <!-- LATEST_SIGNALS_START -->
-**Cập nhật lần cuối:** `2026-06-23 23:59:29`
+**Cập nhật lần cuối:** `2026-06-24 02:06:03`
 
 - **TCB** (`32050.0`): MUA MỚI - Tín hiệu `MACD Golden Cross` (Target: 35,255, Cutloss: 30,448)
 - **VPB** (`26550.0`): MUA MỚI - Tín hiệu `MACD Golden Cross` (Target: 29,205, Cutloss: 25,222)
