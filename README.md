@@ -29,7 +29,7 @@ Hệ thống tự động thu thập dữ liệu chứng khoán Việt Nam, phâ
 *Hệ thống CI/CD sẽ tự động chạy và ghi đè kết quả mới nhất vào phần dưới đây mỗi ngày:*
 
 <!-- LATEST_SIGNALS_START -->
-**Cập nhật lần cuối:** `2026-06-25 16:19:57`
+**Cập nhật lần cuối:** `2026-06-26 00:09:20`
 
 - **VCB** (`60800.0`): QUAN SÁT - Tín hiệu `Giá chạm đáy Bollinger Bands` (Target: 66,880, Cutloss: 57,760)
 <!-- LATEST_SIGNALS_END -->
