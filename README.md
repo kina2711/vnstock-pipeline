@@ -29,7 +29,7 @@ Hệ thống tự động thu thập dữ liệu chứng khoán Việt Nam, phâ
 *Hệ thống CI/CD sẽ tự động chạy và ghi đè kết quả mới nhất vào phần dưới đây mỗi ngày:*
 
 <!-- LATEST_SIGNALS_START -->
-**Cập nhật lần cuối:** `2026-06-27 16:03:29`
+**Cập nhật lần cuối:** `2026-06-27 17:11:28`
 
 - **HPG** (`23500.0`): MUA MỚI - Tín hiệu `MACD Golden Cross` (Target: 25,850, Cutloss: 22,325)
 - **VIB** (`16150.0`): MUA MỚI - Tín hiệu `MACD Golden Cross` (Target: 17,765, Cutloss: 15,342)
