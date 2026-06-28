@@ -46,8 +46,8 @@ jobs:
 
       - name: Commit and Push README Update
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "183811251+kina2711@users.noreply.github.com"
+          git config --local user.name "kina2711"
           git add README.md
           git commit -m "Auto-update latest technical signals in README" || exit 0
           git push
