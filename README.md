@@ -29,9 +29,10 @@ Hệ thống tự động thu thập dữ liệu chứng khoán Việt Nam, phâ
 *Hệ thống CI/CD sẽ tự động chạy và ghi đè kết quả mới nhất vào phần dưới đây mỗi ngày:*
 
 <!-- LATEST_SIGNALS_START -->
-**Cập nhật lần cuối:** `2026-06-29 22:08:52`
+**Cập nhật lần cuối:** `2026-06-30 06:50:05`
 
-- **SAB** (`48700.0`): MUA MỚI - Tín hiệu `MACD Golden Cross` (Target: 53,570, Cutloss: 46,265)
+- **VCB** (`62400.0`): MUA MỚI - Tín hiệu `MACD Golden Cross` (Target: 68,640, Cutloss: 59,280)
+- **VNM** (`55100.0`): QUAN SÁT - Tín hiệu `Giá chạm đáy Bollinger Bands` (Target: 60,610, Cutloss: 52,345)
 <!-- LATEST_SIGNALS_END -->
 
 ---
